@@ -107,7 +107,7 @@ def runtimes_js() -> list[str]:
     return [r for r in ("deno", "node", "bun") if shutil.which(r)]
 
 
-COOKIES_NAVEGADOR = ""  # preenchido por --cookies (chrome, firefox, edge, brave...)
+COOKIES_NAVEGADOR = ""  # preenchido por --cookies: navegador (firefox...) ou arquivo cookies.txt
 
 
 def ytdlp_base() -> list[str]:
@@ -116,7 +116,11 @@ def ytdlp_base() -> list[str]:
     if rts:
         cmd += ["--js-runtimes", ",".join(rts)]
     if COOKIES_NAVEGADOR:
-        cmd += ["--cookies-from-browser", COOKIES_NAVEGADOR]
+        arquivo = Path(COOKIES_NAVEGADOR).expanduser()
+        if arquivo.is_file():
+            cmd += ["--cookies", str(arquivo.resolve())]
+        else:
+            cmd += ["--cookies-from-browser", COOKIES_NAVEGADOR]
     return cmd
 
 
@@ -127,8 +131,8 @@ def obter_info(link: str) -> dict:
         erro = (r.stderr.strip().splitlines() or ["erro desconhecido"])[-1]
         dica = ""
         if "Sign in" in erro or "bot" in erro or "403" in erro:
-            dica = ("\n  Dica: rode de novo com --cookies chrome (ou firefox/edge) para usar o login do "
-                    "seu navegador,\n  e atualize o yt-dlp (veja o README).")
+            dica = ("\n  Dica: rode de novo com --cookies firefox (login do Firefox) ou --cookies cookies.txt"
+                    "\n  (arquivo exportado do Chrome; veja o README) e atualize o yt-dlp.")
         raise SystemExit(f"não consegui abrir o link:\n  {erro}{dica}")
     return json.loads(r.stdout)
 
@@ -839,7 +843,8 @@ def main(argv=None):
     ap.add_argument("--facecam", help="auto | nao | x,y,largura,altura em frações (ex: 0.72,0.7,0.27,0.29)")
     ap.add_argument("--layout", choices=["corte", "desfocado"], help="layout quando não há facecam")
     ap.add_argument("--sem-chat", action="store_true", help="não baixar o chat")
-    ap.add_argument("--cookies", metavar="NAVEGADOR", help="usa o login do navegador no download (chrome, firefox, edge)")
+    ap.add_argument("--cookies", metavar="NAVEGADOR_OU_ARQUIVO",
+                    help="login do YouTube no download: firefox, ou um arquivo cookies.txt exportado do navegador")
     ap.add_argument("--qualidade", type=int, default=1080, help="altura máxima do download (padrão 1080)")
     ap.add_argument("--saida", default=str(AQUI / "cortes"), help="pasta base de saída (padrão: cortes/)")
     ap.add_argument("--apagar-video", action="store_true", help="apaga o vídeo baixado ao terminar")

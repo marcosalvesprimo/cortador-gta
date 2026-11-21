@@ -45,7 +45,7 @@ O resultado fica em `cortes/<nome-da-live>/`:
 | `--so-analisar` | só escolhe os momentos e escreve o `resumo.md`, sem renderizar |
 | `--apagar-video` | apaga o vídeo baixado ao terminar (lives ocupam vários GB) |
 | `--nome minha-live` | nome da pasta de saída |
-| `--cookies chrome` | usa o login do seu navegador (chrome, firefox, edge) quando o YouTube pede "Sign in to confirm you're not a bot" |
+| `--cookies cookies.txt` | usa seu login do YouTube quando ele pede "Sign in to confirm you're not a bot" (veja abaixo). Com Firefox: `--cookies firefox` |
 
 ## Como os momentos são escolhidos
 
@@ -69,9 +69,14 @@ jogo embaixo. Sem facecam, ele recorta 9:16 seguindo a região com mais moviment
 - A nota é relativa à própria live. Revise os clipes antes de postar.
 - Kick nem sempre deixa baixar, por causa da proteção do site. Nesse caso, baixe o vídeo
   de outro jeito e passe o arquivo.
-- Se o YouTube der erro 403 ou "Sign in to confirm you're not a bot": rode com `--cookies chrome`
-  (ou `firefox`/`edge`) e atualize o yt-dlp com `.venv/bin/pip install -U "yt-dlp[default]"`
-  (no Windows: `.venv\Scripts\pip install -U "yt-dlp[default]"`).
+- Se o YouTube der erro 403 ou "Sign in to confirm you're not a bot":
+  1. atualize o yt-dlp: `.venv\Scripts\python -m pip install -U "yt-dlp[default]"`
+     (Mac/Linux: `.venv/bin/python -m pip install -U "yt-dlp[default]"`);
+  2. **Chrome/Edge** (o yt-dlp não consegue ler os cookies deles direto no Windows): instale a
+     extensão **"Get cookies.txt LOCALLY"**, abra o youtube.com logado, clique na extensão →
+     **Export**, salve o arquivo como `cookies.txt` na pasta do cortador e rode
+     `cortar <link> --cookies cookies.txt`. **Firefox:** basta `--cookies firefox`.
+  3. O `cookies.txt` dá acesso à sua conta: não envie para ninguém e apague quando não precisar mais.
 - Só corte lives que você tem direito de usar (suas ou com permissão do streamer) e dê crédito.
 
 Fonte das legendas: Anton (SIL Open Font License, em `fontes/OFL.txt`).
