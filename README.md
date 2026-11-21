@@ -9,8 +9,9 @@ de 5 a 10 clipes verticais (1080x1920, H.264/AAC), com legenda grande palavra po
 Baixe este repositório (botão verde **Code → Download ZIP** no GitHub, depois extraia)
 ou clone com `git clone`. Depois:
 
-**Windows:** dê dois cliques em `instalar.bat`. Ele instala, via winget, o que faltar:
-ffmpeg, Deno (exigido pelo YouTube) e as bibliotecas Python. Precisa do Python 3.11+.
+**Windows:** dê dois cliques em `instalar.bat`. Só precisa do Python 3.11 ou mais novo
+([python.org](https://www.python.org/downloads/), marque "Add python.exe to PATH"). O instalador
+baixa sozinho o ffmpeg e o Deno (exigido pelo YouTube) para a pasta `ferramentas`, sem precisar de winget.
 
 **macOS / Linux:** instale `ffmpeg` (e `deno`) e rode:
 ```bash
